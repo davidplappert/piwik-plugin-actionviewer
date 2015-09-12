@@ -1,0 +1,16 @@
+{
+  "name": "ActionViewer",
+  "version": "0.1.0",
+  "description": "Chart the actions you feed into Piwik.",
+  "theme": false,
+  "require": {
+    "piwik": ">=2.15.0-b7"
+  },
+  "authors": [
+    {
+      "name": "Piwik",
+      "email": "",
+      "homepage": ""
+    }
+  ]
+}
