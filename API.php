@@ -10,6 +10,7 @@ namespace Piwik\Plugins\ActionViewer;
 
 use Piwik\Archive;
 use Piwik\DataTable;
+use Piwik\DataTable\Row;
 use Piwik\Metrics;
 use Piwik\Piwik;
 use Piwik\Db;
@@ -34,8 +35,6 @@ class API extends \Piwik\Plugin\API
      */
     public function getLiveView($idSite, $period, $date, $segment = false)
     {
-		
-		
 		$sql = "
 			SELECT
 				piwik_log_action.name AS 'Event',
@@ -51,10 +50,18 @@ class API extends \Piwik\Plugin\API
 			ORDER BY piwik_log_link_visit_action.server_time DESC
 			LIMIT 50
 		";
-		
         $actionDetails = Db::fetchAll($sql, array($idSite));
 		$dataTable = new DataTable();
-		$dataTable->addRowsFromSimpleArray($actionDetails);
+		foreach ($actionDetails as $action){
+			$row = $dataTable->addRow(new Row(array(
+				Row::COLUMNS => $action,
+				Row::METADATA => $action,
+			)));	
+			//generate subtable with event custom variables
+			
+		}
+		
+		//$dataTable->addRowsFromSimpleArray($actionDetails);
         return $dataTable;
 	}
 }

@@ -10,4 +10,15 @@ namespace Piwik\Plugins\ActionViewer;
 
 class ActionViewer extends \Piwik\Plugin
 {
+	public function registerEvents()
+	{
+		return array(
+			'AssetManager.getJavaScriptFiles' => 'getJavaScriptFiles',
+		);
+	}
+	
+	public function getJavaScriptFiles(&$files)
+	{
+		$files[] = 'plugins/ActionViewer/javascript/plugin.js';
+	}
 }
