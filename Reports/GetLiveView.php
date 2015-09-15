@@ -33,7 +33,7 @@ class GetLiveView extends Base
         $this->order = 1;
 
         // By default standard metrics are defined but you can customize them by defining an array of metric names
-        $this->metrics       = array('User','Event','Time');
+        $this->metrics       = array('User','Event','server_time','Time');
 
         // Uncomment the next line if your report does not contain any processed metrics, otherwise default
         // processed metrics will be assigned
@@ -65,11 +65,14 @@ class GetLiveView extends Base
      */
     public function configureView(ViewDataTable $view)
     {
-        $view->requestConfig->filter_sort_column = 'Time';
-        $view->requestConfig->filter_limit = 50;
+		$view->requestConfig->filter_sort_column = 'server_time';
+		$view->requestConfig->filter_sort_order = 'asc';
+		$view->requestConfig->filter_limit = 25;
+		//$view->requestConfig->hideColumns = array('server_time');
 		$view->config->show_search = false;
 		$view->config->disable_row_evolution = true;
-        $view->config->columns_to_display = $this->metrics;
+		$view->config->columns_to_display = $this->metrics;
+		
     }
 
     /**

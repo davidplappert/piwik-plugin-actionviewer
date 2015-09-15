@@ -1,6 +1,7 @@
 {
     "ActionViewer": {
         "LiveView": "Live View",
-        "DelMe": "DelMe"
+        "DelMe": "DelMe",
+        "UserList": "User List"
     }
 }
