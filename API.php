@@ -135,12 +135,38 @@ class API extends \Piwik\Plugin\API
      * @return DataTable
      */
     public function getUserList($idSite, $period, $date, $segment = false)
-    {
-        $table = new DataTable();
-
-        $table->addRowFromArray(array(Row::COLUMNS => array('nb_visits' => 5)));
-
-        return $table;
+    {	
+		$maxCustomVariables = CustomVariables::getNumUsableCustomVariables();
+		$cvString = '';
+		$i = 1;
+		while ($i <= $maxCustomVariables){
+			$cvString .= 'piwik_log_visit.custom_var_k'.$i.', ';
+			$cvString .= 'piwik_log_visit.custom_var_v'.$i.', ';
+			$i ++;
+		}
+		$sql = "
+			SELECT
+				piwik_log_visit.visit_last_action_time,
+				piwik_log_visit.location_region,
+				piwik_log_visit.location_city,
+				".$cvString."
+				piwik_log_visit.user_id
+			FROM piwik_log_visit
+			WHERE piwik_log_visit.user_id IS NOT NULL
+			AND piwik_log_visit.idsite = ?
+			GROUP BY piwik_log_visit.user_id
+			ORDER BY piwik_log_visit.visit_last_action_time DESC 
+		";
+        $actionDetails = Db::fetchAll($sql, array($idSite));
+		$dataTable = new DataTable();
+		$subDataTable = array();
+		foreach ($actionDetails as $action){
+			$row = array(
+				Row::COLUMNS		=>	$action,
+			);
+			$dataTable->addRow(new Row($row));
+		}
+        return $dataTable;
     }
 
 }
